@@ -1,7 +1,20 @@
-import '../styles/globals.css'
+import React from "react";
+import "../styles/globals.css";
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+export const AppContext = React.createContext();
+
+function AppProvider(props) {
+  const [app, setApp] = React.useState();
+  const value = [app, setApp];
+  return <AppContext.Provider value={value} {...props} />;
 }
 
-export default MyApp
+function MyApp({ Component, pageProps }) {
+  return (
+    <AppProvider>
+      <Component {...pageProps} />;
+    </AppProvider>
+  );
+}
+
+export default MyApp;
