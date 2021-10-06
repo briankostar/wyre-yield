@@ -23,7 +23,7 @@ export default function Login() {
     const config = {
       headers: { Authorization: `Bearer ${did}` },
     };
-    const response = await axios.post("/api/login", {}, config);
+    const response: any = await axios.post("/api/login", {}, config);
     console.log("response", response);
 
     setApp(response.data.data);

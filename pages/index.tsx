@@ -4,7 +4,10 @@ import Link from "next/link";
 export default function Home() {
   return (
     <>
-      <Head></Head>
+      <Head>
+        <title>Thresholds.io</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <nav className="flex items-center justify-between align-middle flex-wrap bg-gradient-to-r from-green-400 to-blue-500 p-6">
         <div className="flex items-center flex-shrink-0 text-white mr-6">
           <Link href="/">

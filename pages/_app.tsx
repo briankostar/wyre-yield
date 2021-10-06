@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/globals.css";
 
-export const AppContext = React.createContext();
+export const AppContext = React.createContext(null);
 
 function AppProvider(props) {
   const [app, setApp] = React.useState();
