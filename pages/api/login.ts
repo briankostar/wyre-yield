@@ -1,11 +1,12 @@
 import { Magic } from "@magic-sdk/admin";
+import type { NextApiRequest, NextApiResponse } from "next";
 import Iron from "@hapi/iron";
 import CookieService from "../../lib/cookie";
 import { createAccount, createWallet, getWallet } from "../../lib/wyre";
 import dbConnect from "../../lib/dbConnect";
 import User from "../../models/User";
 
-export default async (req, res) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") return res.status(405).end();
 
   const did = req.headers.authorization.split("Bearer").pop().trim();
