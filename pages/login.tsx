@@ -18,13 +18,12 @@ export default function Login() {
       process.env.NEXT_PUBLIC_MAGIC_PUB_KEY
     ).auth.loginWithMagicLink({ email: elements.email.value });
 
-    console.log("did", did);
+    console.log("DID token", did);
 
     const config = {
       headers: { Authorization: `Bearer ${did}` },
     };
     const response: any = await axios.post("/api/login", {}, config);
-    console.log("response", response);
 
     setApp(response.data.data);
 

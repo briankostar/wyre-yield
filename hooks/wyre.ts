@@ -7,8 +7,6 @@ export function useCreateWalletOrder(accountId) {
     axios
       .get("/api/createWalletOrder", {})
       .then((res: any) => {
-        console.log("resres", res.data.data);
-
         setUrl(res.data.data);
       })
       .catch((err) => {

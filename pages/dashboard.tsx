@@ -3,6 +3,7 @@ import useAuth from "../hooks/useAuth";
 import Link from "next/link";
 import { AppContext } from "./_app";
 import { useCreateWalletOrder } from "../hooks/wyre";
+import InterestCounter from "../components/InterestCounter";
 
 function calcInterestPerSecond(principal, rate) {
   const period = 1; // 1 year
@@ -13,20 +14,10 @@ function calcInterestPerSecond(principal, rate) {
 
 export default function Dashboard() {
   const [app, setApp] = React.useContext(AppContext);
-  console.log("Dashboard app1", app);
   const walletOrder = useCreateWalletOrder(app?.account?.wyreAccount || null);
-  console.log("walletOrder", walletOrder);
 
   const usdcBalance = app?.wallet?.availableBalances.USDC || 0;
-  const [balance, setBalance] = useState(usdcBalance);
-  const interestPerSecond = calcInterestPerSecond(usdcBalance, 0.08);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setBalance(balance + interestPerSecond);
-    }, 1000);
-    return () => clearInterval(interval);
-  });
+  const usdcAPY = app?.wallet?.savingRates.USDC || 0.08;
 
   function onFundAccount() {
     console.log("onFundAccount", walletOrder);
@@ -60,7 +51,13 @@ export default function Dashboard() {
             </div>
             <div className="mb-8">
               <div className="font-bold">Your Balance: </div>
-              <div className="text-3xl font-bold ">$ {balance}</div>
+              <div className="text-3xl font-bold ">
+                ${" "}
+                <InterestCounter
+                  principal={usdcBalance}
+                  apy={usdcAPY}
+                ></InterestCounter>
+              </div>
             </div>
           </div>
           <div className="flex justify-center">
