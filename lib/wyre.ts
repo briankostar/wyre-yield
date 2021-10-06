@@ -1,6 +1,6 @@
-// const sdk = require("api")("@wyre-hub/v3#6o13y011xktk7auip");
 const axios = require("axios");
 
+const wyreAccount = process.env.AC_AD8RNBUPUGP;
 const wyreKey = process.env.WYRE_SECRET_KEY;
 const wyreUri = "https://api.testwyre.com";
 const config = {
@@ -60,5 +60,26 @@ export async function createAccount(email) {
     })
     .catch(function (err) {
       console.log("Err creating Account", err.data);
+    });
+}
+
+export async function createWalletOrder() {
+  const body = {
+    referrerAccountId: wyreAccount,
+    destCurrency: "USDC",
+    lockFields: ["destCurrency"],
+  };
+
+  console.log("createWalletOrder");
+
+  return axios
+    .post(wyreUri + `/v3/orders/reserve`, body, config)
+    .then(async (res) => {
+      const response = res.data;
+      console.log("Success creating wallet order", response);
+      return response;
+    })
+    .catch(function (err) {
+      console.log("Err creating wallet order", err.data);
     });
 }

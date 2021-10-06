@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
 import Link from "next/link";
 import { AppContext } from "./_app";
+import { useCreateWalletOrder } from "../hooks/wyre";
 
 function calcInterestPerSecond(principal, rate) {
   const period = 1; // 1 year
@@ -12,9 +13,11 @@ function calcInterestPerSecond(principal, rate) {
 
 export default function Dashboard() {
   const [app, setApp] = React.useContext(AppContext);
-  console.log("Dashboard app", app);
+  console.log("Dashboard app1", app);
+  const walletOrder = useCreateWalletOrder(app?.account?.wyreAccount || null);
+  console.log("walletOrder", walletOrder);
 
-  const usdcBalance = app.wallet.availableBalances.USDC || 0;
+  const usdcBalance = app?.wallet?.availableBalances.USDC || 0;
   const [balance, setBalance] = useState(usdcBalance);
   const interestPerSecond = calcInterestPerSecond(usdcBalance, 0.08);
 
@@ -24,6 +27,10 @@ export default function Dashboard() {
     }, 1000);
     return () => clearInterval(interval);
   });
+
+  function onFundAccount() {
+    console.log("onFundAccount", walletOrder);
+  }
 
   return (
     <div>
@@ -57,7 +64,11 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="flex justify-center">
-            <button className="btn btn-blue">Fund Your Account</button>
+            <a href={walletOrder?.url || "#"} target="_blank">
+              <button className="btn btn-blue" onClick={onFundAccount}>
+                Fund Your Account
+              </button>
+            </a>
           </div>
         </div>
       </div>
