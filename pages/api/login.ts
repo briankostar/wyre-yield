@@ -10,9 +10,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") return res.status(405).end();
 
   const did = req.headers.authorization.split("Bearer").pop().trim();
-  const magicUser = await new Magic(
-    process.env.MAGIC_SECRET_KEY
-  ).users.getMetadataByToken(did);
+  const magic = new Magic(process.env.MAGIC_SECRET_KEY);
+  const magicUser = await magic.users.getMetadataByToken(did);
 
   console.log("magicUser", magicUser);
 

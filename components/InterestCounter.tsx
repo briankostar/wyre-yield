@@ -8,7 +8,12 @@ function calcInterestPerSecond(principal, rate) {
 }
 
 export default function InterestCounter({ principal, apy }) {
+  const [prevPrincipal, setPrincipal] = useState(principal);
   const [balance, setBalance] = useState(principal);
+  if (prevPrincipal !== principal) {
+    setPrincipal(principal);
+    setBalance(principal);
+  }
   const interestPerSecond = calcInterestPerSecond(principal, apy);
 
   useEffect(() => {
@@ -16,7 +21,7 @@ export default function InterestCounter({ principal, apy }) {
       setBalance(balance + interestPerSecond);
     }, 1000);
     return () => clearInterval(interval);
-  });
+  }, [principal, balance]);
 
   return <span>{balance}</span>;
 }

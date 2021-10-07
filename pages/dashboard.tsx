@@ -3,6 +3,7 @@ import Link from "next/link";
 import { AppContext } from "./_app";
 import InterestCounter from "../components/InterestCounter";
 import axios from "axios";
+import useAuth from "../hooks/useAuth";
 
 function calcInterestPerSecond(principal, rate) {
   const period = 1; // 1 year
@@ -12,7 +13,9 @@ function calcInterestPerSecond(principal, rate) {
 }
 
 export default function Dashboard() {
+  useAuth();
   const [app, setApp] = React.useContext(AppContext);
+
   const usdcBalance = app?.wallet?.availableBalances.USDC || 0;
   const usdcAPY = app?.wallet?.savingRates.USDC || 0.08;
 

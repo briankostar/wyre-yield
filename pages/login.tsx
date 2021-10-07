@@ -4,6 +4,7 @@ import { Magic } from "magic-sdk";
 import Link from "next/link";
 import axios from "axios";
 import { AppContext } from "./_app";
+import { login } from "../lib/login";
 
 export default function Login() {
   const router = useRouter();
@@ -14,23 +15,13 @@ export default function Login() {
 
     const { elements } = event.target;
 
-    const did = await new Magic(
-      process.env.NEXT_PUBLIC_MAGIC_PUB_KEY
-    ).auth.loginWithMagicLink({ email: elements.email.value });
-
-    console.log("DID token", did);
-
-    const config = {
-      headers: { Authorization: `Bearer ${did}` },
-    };
-    const response: any = await axios.post("/api/login", {}, config);
+    const response: any = await login(elements.email.value);
 
     setApp(response.data.data);
 
     if (response.status === 200) {
       router.push("/dashboard");
     } else {
-      /* handle errors */
       console.log("Error logging in!", response);
     }
   };
