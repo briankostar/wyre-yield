@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import useAuth from "../hooks/useAuth";
 import Link from "next/link";
 import { AppContext } from "./_app";
-import { useCreateWalletOrder } from "../hooks/wyre";
 import InterestCounter from "../components/InterestCounter";
+import axios from "axios";
 
 function calcInterestPerSecond(principal, rate) {
   const period = 1; // 1 year
@@ -14,13 +13,21 @@ function calcInterestPerSecond(principal, rate) {
 
 export default function Dashboard() {
   const [app, setApp] = React.useContext(AppContext);
-  const walletOrder = useCreateWalletOrder(app?.account?.wyreAccount || null);
-
   const usdcBalance = app?.wallet?.availableBalances.USDC || 0;
   const usdcAPY = app?.wallet?.savingRates.USDC || 0.08;
 
-  function onFundAccount() {
-    console.log("onFundAccount", walletOrder);
+  async function onFundAccount() {
+    console.log("onFundAccount");
+    await axios
+      .get("/api/createWalletOrder")
+      .then((res: any) => {
+        console.log("res", res.data.data.url);
+        const win = window.open(res.data.data.url, "_blank");
+        win.focus();
+      })
+      .catch((err) => {
+        console.log("Error at useCreateWalletOrder", err);
+      });
   }
 
   return (
@@ -35,7 +42,7 @@ export default function Dashboard() {
         </div>
 
         <div>
-          <div className="text-sm text-white">Hi, {app.account.email}</div>
+          <div className="text-sm text-white">Hi, {app?.account.email}</div>
         </div>
       </nav>
       <div className="mx-auto max-w-lg px-8 mt-16">
@@ -43,11 +50,11 @@ export default function Dashboard() {
           <div>
             <div className="mb-8">
               <div className="font-bold">Address:</div>
-              {app.wallet.depositAddresses.ETH}
+              {app?.wallet.depositAddresses.ETH}
             </div>
             <div className="mb-8">
               <div className="font-bold">APY:</div>{" "}
-              {app.wallet.savingRates.USDC * 100} % on USDC
+              {app?.wallet.savingRates.USDC * 100} % on USDC
             </div>
             <div className="mb-8">
               <div className="font-bold">Your Balance: </div>
@@ -61,11 +68,11 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="flex justify-center">
-            <a href={walletOrder?.url || "#"} target="_blank">
-              <button className="btn btn-blue" onClick={onFundAccount}>
-                Fund Your Account
-              </button>
-            </a>
+            {/* <a href={walletOrder?.url || "#"} target="_blank"> */}
+            <button className="btn btn-blue" onClick={onFundAccount}>
+              Fund Your Account
+            </button>
+            {/* </a> */}
           </div>
         </div>
       </div>

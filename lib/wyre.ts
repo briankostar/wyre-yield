@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-const wyreAccount = process.env.AC_AD8RNBUPUGP;
+const wyreAccount = process.env.WYRE_ACCOUNT;
 const wyreKey = process.env.WYRE_SECRET_KEY;
 const wyreUri = "https://api.testwyre.com";
 const config = {
@@ -80,6 +80,6 @@ export async function createWalletOrder() {
       return response;
     })
     .catch(function (err) {
-      console.log("Err creating wallet order", err.data);
+      console.log("Err creating wallet order", err);
     });
 }
